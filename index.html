@@ -152,6 +152,138 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-前缀和的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/21/%E5%89%8D%E7%BC%80%E5%92%8C%E7%9A%84%E4%BD%BF%E7%94%A8/">前缀和的使用</a>
+    </h1>
+  
+
+        
+        <a href="/2020/09/21/%E5%89%8D%E7%BC%80%E5%92%8C%E7%9A%84%E4%BD%BF%E7%94%A8/" class="archive-article-date">
+  	<time datetime="2020-09-21T04:36:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="前缀和的基本概念"><a href="#前缀和的基本概念" class="headerlink" title="前缀和的基本概念"></a>前缀和的基本概念</h3><p>s[i] 为 数组a 前i个元素的和<br>s[i] = a[0]+ … + a[i]<br>s[i] = s[i-1] + a[i]</p>
+<ul>
+<li>l 到 r 区间内的和：<br>sum[l,r] = s[r]-s[l-1]</li>
+</ul>
+<p>异或前缀和：<br>s[i] 为 数组a 前i个元素的异或和<br>s[i] = s[i-1] xor a[i]</p>
+<h3 id="二维前缀和"><a href="#二维前缀和" class="headerlink" title="二维前缀和"></a>二维前缀和</h3><h4 id="P2004-领地选择"><a href="#P2004-领地选择" class="headerlink" title="P2004 领地选择"></a>P2004 领地选择</h4><p>题意理解：<br>有一个N x M的地图，地图上的每一个点都有一个值，求占地C x C 正方形里值的和最大</p>
+<p>思路：<br>用sum[a][b]来记录 从[0][0]到[a][b]范围内的值之和，即二维前缀和。</p>
+<p>边读边存<br><code>sum[i][j] += sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1]+data;</code><br>当读到的i,j &gt;c 时。<br>开始判断以(i,j)为右下角坐标的C x C正方形的值和是不是最大的</p>
+<p>即：<br><code>sumMax = max(sumMax,sum[i][j] - sum[i-c][j] - sum[i][j-c] + sum[i-c][j-c]);</code></p>
+<h5 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h5><p>如：求区间[a][b] —— [i][j]范围内的值 (i&gt;a &amp;&amp; j&gt;b)<br><code>= sum[i][j] - sum[a][j] - sum[i][b] + sum[a][b]</code></p>
+<p>code:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int sum[1009][1009];</span><br><span class="line">int n,m,c;</span><br><span class="line">int maxs&#x3D;-1e9;</span><br><span class="line">int maxi &#x3D; 0;</span><br><span class="line">int maxj &#x3D; 0;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	scanf(&quot;%d %d %d&quot;,&amp;n,&amp;m,&amp;c);</span><br><span class="line">	for(int i &#x3D; 1;i &lt;&#x3D; n;i++)&#123;</span><br><span class="line">		for(int j &#x3D; 1;j &lt;&#x3D; m;j++)&#123;</span><br><span class="line">			int data;</span><br><span class="line">			scanf(&quot;%d&quot;,&amp;data);</span><br><span class="line">			sum[i][j] +&#x3D; sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1]+data;</span><br><span class="line">			if(j&gt;&#x3D;c&amp;&amp;i&gt;&#x3D;c)&#123;</span><br><span class="line">				int now &#x3D; sum[i][j] - sum[i-c][j] - sum[i][j-c] + sum[i-c][j-c];</span><br><span class="line">				if(now&gt;maxs)&#123;</span><br><span class="line">					maxs &#x3D; now;</span><br><span class="line">					maxi &#x3D; i-c+1;</span><br><span class="line">					maxj &#x3D; j-c+1;</span><br><span class="line">				&#125;           </span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">	printf(&quot;%d %d\n&quot;,maxi,maxj);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="由前缀和到差分"><a href="#由前缀和到差分" class="headerlink" title="由前缀和到差分"></a>由前缀和到差分</h3><h4 id="P3406-海底高铁"><a href="#P3406-海底高铁" class="headerlink" title="P3406 海底高铁"></a>P3406 海底高铁</h4><p>题意理解：<br>对于一条路线，要经过m个城市（可能有重复的城市），城市只有i-1 i i+1 相邻，对于相邻俩个城市i和i+1之间的路段，设走过这条路有ni次，要么付ci + ni * bi 要么付ai * ni；</p>
+<p>就是一个选择问题，首先得知道每个路段会经过多少次。但是如果对于2号城市到10000号城市，每次都用循环去累加次数，会次数过多。</p>
+<p>这里可以用到差分的思想。<br>对于l 到 r之间和</p>
+<p>只需要记录ton[l] 和 ton[r]就行</p>
+<p>即：<br>ton[l]++;<br>ton[r]–;<br>然后通过前缀和再求得中间的值：<br>for i = l+1；i&lt;=r;i++<br>ton[l] = ton[l-1] + ton[i];</p>
+<p>用p[i]来记录第i段路</p>
+<p>code：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">const int imax &#x3D; 100009;</span><br><span class="line">long long n,m;</span><br><span class="line">long long p[imax];</span><br><span class="line">long long a[imax],b[imax],c[imax];</span><br><span class="line"></span><br><span class="line">int ton[imax]; </span><br><span class="line">long long ans &#x3D; 0;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	scanf(&quot;%d %d&quot;,&amp;n,&amp;m);</span><br><span class="line">	</span><br><span class="line">	for(int i &#x3D; 0;i &lt; m;i++)&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;p[i]);</span><br><span class="line">		if(i!&#x3D;0)&#123;</span><br><span class="line">			if(p[i-1]&gt;&#x3D;p[i])&#123;</span><br><span class="line">				ton[p[i]]++;</span><br><span class="line">				ton[p[i-1]]--;</span><br><span class="line">			&#125;</span><br><span class="line">			else&#123;</span><br><span class="line">				ton[p[i-1]]++;</span><br><span class="line">				ton[p[i]]--;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	for(int i &#x3D; 1;i&lt;n;i++)&#123;</span><br><span class="line">		scanf(&quot;%d %d %d&quot;,&amp;a[i],&amp;b[i],&amp;c[i]);</span><br><span class="line">		</span><br><span class="line">		ton[i] &#x3D; ton[i-1]+ton[i];</span><br><span class="line">		</span><br><span class="line">		if(ton[i]&gt;0)&#123;</span><br><span class="line">			if(c[i] - (a[i]-b[i])*ton[i] &lt;&#x3D;0)&#123;</span><br><span class="line">				ans +&#x3D; (ton[i]*b[i]+c[i]);</span><br><span class="line">&#x2F;&#x2F;				printf(&quot;对于第%d到%d，买卡，总共花了%d\n&quot;,i,i+1,(ton[i]*b[i]+c[i]));</span><br><span class="line">			&#125; </span><br><span class="line">			else &#123;</span><br><span class="line">				ans +&#x3D; ton[i]*a[i]; </span><br><span class="line">&#x2F;&#x2F;				printf(&quot;对于第%d到%d，不买卡，总共花了%d\n&quot;,i,i+1,ton[i]*a[i]);</span><br><span class="line">			&#125;			</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	printf(&quot;%lld&quot;,ans);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="分组的前缀和——与数学公式的结合"><a href="#分组的前缀和——与数学公式的结合" class="headerlink" title="分组的前缀和——与数学公式的结合"></a>分组的前缀和——与数学公式的结合</h3><h4 id="P2671-求和"><a href="#P2671-求和" class="headerlink" title="P2671 求和"></a>P2671 求和</h4><p>题意理解：<br>有m个颜色总数，n个格子<br>求所有的俩元组(x,z)</p>
+<ul>
+<li>z = 2*i + x (i&gt;=1)</li>
+<li>并且x,z的颜色相同</li>
+</ul>
+<p>（x+z） * （number_x +number_z)<br>的和</p>
+<p>思路：</p>
+<ul>
+<li>nu数组 记录i对应的number</li>
+<li>c数据 记录i对应的颜色</li>
+</ul>
+<hr>
+<ul>
+<li>color[x][1] 记录i为奇数 且 颜色为x的格子数</li>
+<li>color[x][0] 记录i为偶数 且 颜色为x的格子数</li>
+</ul>
+<hr>
+<ul>
+<li>sum[x][1] 记录i为奇数 且 颜色为x的格子的number的和</li>
+<li>sum[x][0] 记录i为偶数 且 颜色为x的格子的number的和</li>
+</ul>
+<p>分类讨论，对于颜色为x，i为奇数的格子<br>如果有n个，<br>那么就有<br>假设1 3 5 7格子的颜色相同<br>（1+3）*（number_1+number_3）+ (1+5) * (number_1+number_5) + (1+7) * (number_1+number_7)</p>
+<p>+</p>
+<p>(3+5) * (number_3+number_5) + (3+7) * (number_3+number_7)</p>
+<p>+</p>
+<p>(5+7) * (number_5+number_7)</p>
+<p>从上面发现，我们可以把所有的项拆开来<br>可以发现</p>
+<p>*<em>对于i</em>number_i**</p>
+<ul>
+<li>1出现3次 </li>
+<li>3出现3次 </li>
+<li>5出现3次 </li>
+</ul>
+<p>i*nui * （colorx-2）</p>
+<p>*<em>对于i</em>number_j**</p>
+<ul>
+<li>1 3 1 5 1 7  …都是1次</li>
+</ul>
+<p>i* sumx</p>
+<p>再把i提出来</p>
+<p>则对于i</p>
+<p>i *（nui * （colorx-2）  + sumx ）</p>
+<p>公式拆开发现并不是巧合，<br>则可以得到一个可以利用前缀和简化运算的操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for(i&#x3D;1;i&lt;&#x3D;7;i+&#x3D;2)&#123;</span><br><span class="line">    ans &#x3D; ans + i * (nui * (colorx-2) )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>code:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int n,m;</span><br><span class="line">int sum[100009][2];</span><br><span class="line">int color[100009][2];</span><br><span class="line">int c[100009];</span><br><span class="line">int nu[100009];</span><br><span class="line">int ans &#x3D; 0;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	int x;</span><br><span class="line">	scanf(&quot;%d %d&quot;,&amp;n,&amp;m);</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;x);</span><br><span class="line">		nu[i]&#x3D;x;</span><br><span class="line">	&#125;</span><br><span class="line">	for(int j &#x3D; 1;j&lt;&#x3D;n;j++)</span><br><span class="line">	&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;x);</span><br><span class="line">		c[j] &#x3D; x;</span><br><span class="line">		color[x][j%2]++;</span><br><span class="line">		sum[x][j%2] &#x3D; (sum[x][j%2] + nu[j])%10007; &#x2F;&#x2F; 把所有这个颜色的格子数 按奇偶 加起来 </span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;n;i++)&#123;</span><br><span class="line">		ans &#x3D; (ans + i*(((color[c[i]][i%2]-2)*nu[i])%10007+sum[c[i]][i%2]))%10007;</span><br><span class="line">	&#125; </span><br><span class="line">	printf(&quot;%d&quot;,ans);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/09/21/%E5%89%8D%E7%BC%80%E5%92%8C%E7%9A%84%E4%BD%BF%E7%94%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Hello-World-0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
