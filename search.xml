@@ -10,24 +10,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2020/09/02/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>前缀和的使用</title>
     <url>/2020/09/21/%E5%89%8D%E7%BC%80%E5%92%8C%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h3 id="前缀和的基本概念"><a href="#前缀和的基本概念" class="headerlink" title="前缀和的基本概念"></a>前缀和的基本概念</h3><p>s[i] 为 数组a 前i个元素的和<br>s[i] = a[0]+ … + a[i]<br>s[i] = s[i-1] + a[i]</p>
@@ -101,6 +83,9 @@
 
 
 ]]></content>
+      <tags>
+        <tag>PHP</tag>
+      </tags>
   </entry>
   <entry>
     <title>algorithm</title>
@@ -207,7 +192,7 @@
 <h4 id="考试奖励"><a href="#考试奖励" class="headerlink" title="考试奖励"></a>考试奖励</h4><p>PAT 不设合格标准，凡参加考试且获得非零分者均有成绩，可获得统一颁发的证书。 证书中包含“考试分数/满分”和本次考试的“排名/考生总数”两部分成绩。</p>
 <p>获得优秀成绩（甲、乙、顶级90分以上，）的考生，有资格购买实体徽章<br><a href="https://www.patest.cn/introduction/badge_issuance_rule">徽章规则</a></p>
 <h4 id="考点"><a href="#考点" class="headerlink" title="考点"></a>考点</h4><p><a href="https://www.patest.cn/location">PAT 考点</a><br>北京唯一考点：<br>北京工业大学 北京工业大学计算中心（校内东南角 实训楼（原知行楼）1层）</p>
-<h4 id="编程语言及编译器-1"><a href="#编程语言及编译器-1" class="headerlink" title="编程语言及编译器"></a>编程语言及编译器</h4><p>北京工业大学： 郑爽, <a href="mailto:&#x32;&#50;&#x34;&#54;&#x31;&#x39;&#56;&#x38;&#x40;&#113;&#113;&#46;&#99;&#x6f;&#109;">&#x32;&#50;&#x34;&#54;&#x31;&#x39;&#56;&#x38;&#x40;&#113;&#113;&#46;&#99;&#x6f;&#109;</a><br>Code::Blocks、Dev C＋＋5.10、Visual Studio2010、Eclipse Oxygen 3、Python3.6</p>
+<h4 id="编程语言及编译器-1"><a href="#编程语言及编译器-1" class="headerlink" title="编程语言及编译器"></a>编程语言及编译器</h4><p>北京工业大学： 郑爽, <a href="mailto:&#50;&#x32;&#x34;&#54;&#x31;&#x39;&#56;&#x38;&#x40;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;">&#50;&#x32;&#x34;&#54;&#x31;&#x39;&#56;&#x38;&#x40;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;</a><br>Code::Blocks、Dev C＋＋5.10、Visual Studio2010、Eclipse Oxygen 3、Python3.6</p>
 <h4 id="考试形式-1"><a href="#考试形式-1" class="headerlink" title="考试形式"></a>考试形式</h4><p><strong>参赛要求</strong>：无论是否是大学生，均可参加。<br><strong>考试时间</strong>：三个小时。<br><strong>考试地点</strong>：线下，在全国有70多个认证点，北京为北京工业大学。<br><strong>分组</strong>：PAT分为顶级（英文，3题）、甲级（英文，4题）、乙级（中文，5题）。满分都是100分。<br><strong>考试赛制</strong>：IOI赛制，每道题提交后可以看到反馈，不计提交次数，无罚时。</p>
 <h4 id="考纲-1"><a href="#考纲-1" class="headerlink" title="考纲"></a>考纲</h4><h5 id="乙级"><a href="#乙级" class="headerlink" title="乙级"></a>乙级</h5><p><strong>中文题目 只涉及基础编程 最难到排序算法</strong></p>
 <ol>
@@ -263,5 +248,29 @@
 <p>6）        学校排名前30的队伍获得学校排名证书。</p>
 <h4 id="竞赛方式"><a href="#竞赛方式" class="headerlink" title="竞赛方式"></a>竞赛方式</h4><p><strong>比赛时长</strong>: 五个小时。<br><strong>比赛题目</strong>：10~13题。年度总决赛、分站赛题目为英文描述（个别词句可附中文注释），其他比赛可采用中文描述。<br><strong>赛制方式</strong>：每支参赛队共用1台机器。采用机器实时评测，每通过一个题目升一个对应颜色的气球。<br><strong>比赛封榜：</strong>比赛最后一小时不显示排名变化情况，但仍然升气球，颁奖后公布最终结果。</p>
 <h3 id="蓝桥杯"><a href="#蓝桥杯" class="headerlink" title="蓝桥杯"></a>蓝桥杯</h3>]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/09/02/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
   </entry>
 </search>
