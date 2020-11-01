@@ -1,6 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>DAG上的动态规划</title>
+    <url>/2020/11/01/9.2%20DAG%E4%B8%8A%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/</url>
+    <content><![CDATA[<h1 id="DAG上的动态规划"><a href="#DAG上的动态规划" class="headerlink" title="DAG上的动态规划"></a>DAG上的动态规划</h1><p><strong>DAG图，即有向无环图。</strong></p>
+<p>紫薯上说：有向无环图上的动态规划是学习动态规划的基础。<br><strong>因为有很多问题可以转换为求DAG上最短路、最长路或路径计数的问题。</strong></p>
+<p><strong>问题要素分割：</strong><br>|种类\求的结果|最短路|最长路|路径计数|<br>|–|–|–|–|<br>|不固定起点终点|最短路问题|最长路问题||<br>|固定起点|不常见|完全背包问题|<br>|固定终点|不常见|完全背包问题|<br>|固定起点和终点|没见过|一定要装满的完全背包问题||</p>
+<p>DAG（有向无环图）：<br><img src="/dag.png" alt="DAG" title="DAG"></p>
+<hr>
+<h2 id="二元关系的问题转换成图上问题"><a href="#二元关系的问题转换成图上问题" class="headerlink" title="二元关系的问题转换成图上问题"></a>二元关系的问题转换成图上问题</h2><p><a href="https://blog.csdn.net/czl_Lynn/article/details/77829109?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522160418971619724822560198%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=160418971619724822560198&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_v2~rank_v28-3-77829109.first_rank_ecpm_v3_pc_rank_v2&utm_term=%E4%BA%8C%E5%85%83%E5%85%B3%E7%B3%BB&spm=1018.2118.3001.4449">二元关系的资料参考</a></p>
+<p><strong>二元关系:</strong> 简单来说，就是两个事物之间的关系。</p>
+<p>在<strong>数学上</strong>，二元关系指，有一个集合S，S中的所有元素都是二元有序对。</p>
+<p>S = { [x1:y1], [x2:y2] ,…,[xn:yn] }</p>
+<p>当然，序列X和序列Y中的元素可以不仅仅是一对一的关系，也可以一对多甚至多对多。<br>S = { [x1:y1], [x1:y2] ,…,[xm:yn] }</p>
+<p>特殊的，<strong>单个集合A</strong>上的二元关系R指的是A×A={&lt;x,y&gt;|xεA,yεA}</p>
+<p>在<strong>图中</strong>，我们可以使集合S = A∪B，用R表示S中某两个元素的的二元关系。<br>A={x1,x2,…,xm},B={y1,y2,…,yn}  -&gt;  S = {s1,s2,…,sn}</p>
+<p>R(si,sj)</p>
+<p><strong>建图</strong>：<br>把S中的每个元素看作一个结点，如果R(si,sj),那么就建立一条si到sj到有向边。</p>
+<table>
+<thead>
+<tr>
+<th>序列</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>B</td>
+<td>0</td>
+<td>5</td>
+<td>6</td>
+<td>2</td>
+<td>3</td>
+</tr>
+</tbody></table>
+<p>转换为图：<br><img src="/dag.png" alt="DAG" title="DAG"></p>
+<h3 id="问题举例"><a href="#问题举例" class="headerlink" title="问题举例"></a>问题举例</h3><h4 id="嵌套矩形"><a href="#嵌套矩形" class="headerlink" title="嵌套矩形"></a>嵌套矩形</h4><blockquote>
+<p>嵌套矩形问题。有n个矩形，每个矩形可以用两个整数a、b描述，表示它的长和宽，矩形X(a，b)可以嵌套在矩形Y(c，d)中，当且仅当a&lt;c，b&lt;d，或者b&lt;c，a&lt;d(相当于把矩形X旋转90°)。例如，(1，5)可以嵌套在(6，2)内，但不能嵌套在(3，4)内。你的任务是选出尽量多的矩形排成一行，使得除了最后一个之外，每一个矩形都可以嵌套在下一个矩形内。如果有多解，矩形编号的字典序应尽量小。</p>
+</blockquote>
+<p>分析：<br><strong>结点假设：对于每一个矩形都把它看作一个结点。</strong><br><strong>边路假设：对于矩形X可以嵌套在矩形Y中，可以说XY具有嵌套关系R(x,y)，设置 x-&gt;y 的有向边。</strong></p>
+<p>那么问题转换为，求DAG中的最长路序列，且字典序最小。</p>
+<p><strong>任意起点的DAG中最长路</strong></p>
+<hr>
+<h4 id="完全背包——硬币问题"><a href="#完全背包——硬币问题" class="headerlink" title="完全背包——硬币问题"></a>完全背包——硬币问题</h4><blockquote>
+<p>硬币问题。有n种硬币，面值分别为V1，V2,..，Vn每种都有无限多。给定非负整数S可以选用多少个硬币，使得面值之和 <em>恰好</em> 为S? 输出硬币数目的最小值和最大值。1≤n≤100，0≤S≤10000，1≤Vi≤S.</p>
+</blockquote>
+<p>分析：<br>背包问题也能转换成DAG问题。</p>
+<p><strong>结点假设：<br>把每一种面值 和 <em>任意种的任意数量面值之和（不大于S）</em> 看做一个结点。</strong></p>
+<p><strong>边路假设：</strong><br><strong>1.当以0为起点、S为终点时，任意两个结点，当 Vi &lt; Vj 时，设置 i-&gt;j 的有向边。即，保证每条路上的结点的值 <em>递增</em> 即可。</strong><br><strong>1.当以S为起点、0为终点时，任意两个结点，当 Vi &gt; Vj 时，设置 i-&gt;j 的有向边。即，保证每条路上的结点的值 <em>递减</em> 即可。</strong></p>
+<p>经过这样转换后，我们要求的就是 在从起点出发到达终点的所有路径中，最短路和最长路。</p>
+<p>那么问题转换为，DAG上 固定起点和终点 的最短路和最长路。</p>
+<p><strong>固定起点和终点的DAG中最长路和最短路</strong></p>
+<p>e.g.<br>现在有面值为2、5、6的无限量硬币，S为10。</p>
+<p><strong>结点:</strong><br>2、2+2、5、6、2+5、2+6、2+2+5、2+2+6<br>即2、4、5、6、7、8、9、10<br><strong>边路：</strong><br>实际的处理过程中，<strong>对于单调的结点序列可以不需要设置其他数据结构来存储结点的信息。</strong></p>
+<p>（下面指单调递增的结点序列， 0为起点，S为终点 ， V 表示当前结点的值，Vi表示第i种硬币的面值 )<br>结点间的跳转只需要遍历<strong>所有的硬币面值</strong>，当满足 S &gt;= V + vi 时，表示能从<strong>当前结点V</strong>到 <strong>V+Vi结点</strong>。</p>
+<hr>
+<h2 id="不固定起点终点的最长路及字典序"><a href="#不固定起点终点的最长路及字典序" class="headerlink" title="不固定起点终点的最长路及字典序"></a>不固定起点终点的最长路及字典序</h2><p>在动态规划求解中，最重要的两个概念就是 状态 和 状态转移方程。</p>
+<p>状态：<br>设d(i)表示从结点i出发的最长路长度。</p>
+<p>状态转移方程：<br>$d(i)=\max {d(j)+1 \mid(i, j) \in E}$</p>
+<p>E为边集</p>
+<p>d数组要全部初始化为0</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int dp(int i) &#123;</span><br><span class="line">    int &amp; ans &#x3D; d[i]; &#x2F;&#x2F;用ans以取址的方式来保存当前的状态，既使得状态简洁，且传址几乎不费时间。</span><br><span class="line"></span><br><span class="line">    if(ans &gt; 0) return ans; &#x2F;&#x2F; 如果当前状态 访问过 直接返回</span><br><span class="line">    ans &#x3D; 1; &#x2F;&#x2F; 没访问过，给它一个初始值</span><br><span class="line"></span><br><span class="line">    for(int j &#x3D; 1;j &lt;&#x3D;n; j++)&#123;</span><br><span class="line">        if(G[i][j]) ans &#x3D; max(ans,dp(j)+1); &#x2F;&#x2F; 如果能到达下一个结点，那么更新当前结点的值</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans; &#x2F;&#x2F; 返回当前状态</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>max函数，当相等时返回的是前一个，即当前状态不变。<br>这样可以保证当前路径的字典序最小。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">main()&#123;</span><br><span class="line">    int ans_i &#x3D; -1;</span><br><span class="line">    int maxx &#x3D; -1;</span><br><span class="line">    for(int j &#x3D; 1;j &lt;&#x3D;n; j++)&#123;</span><br><span class="line">        &#x2F;&#x2F;因为起点不固定，所以要把所有结点都遍历一遍，以防有结点落下。</span><br><span class="line">        if(maxx &lt; dp(i))&#123;</span><br><span class="line">            maxx &#x3D; d[i];</span><br><span class="line">            ans_i &#x3D; i;</span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    print_ans(ans_i);&#x2F;&#x2F;字典序打印从 ans_i 开始</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以下图为例子<img src="/%E7%9F%A9%E5%BD%A2%E5%B5%8C%E5%A5%97eg.png" alt="矩形嵌套eg" title="矩形嵌套eg">。<br>在遍历执行dp(i)的过程中，d[]的变化是这样的：</p>
+<p>执行dp(1)：<br>|d|1|2|3|4|5|<br>|–|–|–|–|–|–|<br>|dp(1)|1|0|0|0|0|<br>|dp(4)|1|0|0|1|0|<br>|dp(5)|1|0|0|1|1|<br>|返回dp(4)|1|0|0|2|1|<br>|返回dp(1)|3|0|0|2|1|</p>
+<p>执行dp(2):<br>|d|1|2|3|4|5|<br>|–|–|–|–|–|–|<br>|dp(2)|3|1|0|2|1|<br>|dp(3)|3|1|1|2|1|<br>|返回dp(2)|3|2|1|2|1|<br>|dp(4)已存在直接返回|3|2|1|2|1|<br>|返回dp(2)|3|3|1|2|1|</p>
+<p>之后的dp(3…5)都已经存在，直接结束。</p>
+<p>从上面可以发现，不管是什么时候进入了dp(i)，只要dp(i)执行完结束后返回，那么d[i]中存的值必然是 <strong>从结点i出发的最长路长度</strong>。<br><strong>对于找到的每组 i 和 j 只要 d[i] == d[j] + 1 且 G[i][j] == 1，那么i-&gt;j。必然是所求最长路中的一段路</strong></p>
+<p>所以当i和j都从1开始时，找到的第一组 i和j，就是字典序最短的期中一段路。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void print_ans()&#123;</span><br><span class="line">    printf(&quot;%d &quot;,i);</span><br><span class="line">    for(int j &#x3D; 1;j &lt;&#x3D;n;j++)&#123;</span><br><span class="line">        if(G[i][j] &amp;&amp; d[i] &#x3D;&#x3D; d[j] + 1)&#123;</span><br><span class="line">            print_ans(j); &#x2F;&#x2F; 找到j后进入打印j</span><br><span class="line">            break; &#x2F;&#x2F;找到第一组后就停止</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>tips：</p>
+<ol>
+<li>声明了一个变量来保存当前状态，非常简练。</li>
+</ol>
+<p>依此类推，可以求得 固定起点或固定终点的最短路/最长路，不固定起点终点的最短路。</p>
+<hr>
+<h2 id="固定终点的最长路和最短路"><a href="#固定终点的最长路和最短路" class="headerlink" title="固定终点的最长路和最短路"></a>固定终点的最长路和最短路</h2><p>以完全背包问题——硬币问题为例</p>
+<blockquote>
+<p>硬币问题。有n种硬币，面值分别为V1，V2,..，Vn每种都有无限多。给定非负整数S可以选用多少个硬币，使得面值之和 <em>恰好</em> 为S? 输出硬币数目的最小值和最大值。1≤n≤100，0≤S≤10000，1≤Vi≤S.</p>
+</blockquote>
+<p>状态：<br>d(i) 表示，从0开始以i为终点的最长路径长度和最短路径长度</p>
+<p>状态转移方程：<br>$d(i)=\max {d(i), d(i - v[j])+1 \mid(i, j) \in E}$</p>
+<p><em>除了从图的角度理解外，也可以理解为，对于容量为i的背包，对于大小为Vi的硬币，如果放入则为容量为i的背包，可以放入的数量d(i) 为 d(i-v[i]) + 1。否则放入，则为它自身。取其中最大的哪那一个</em></p>
+<h3 id="dp的几种写法"><a href="#dp的几种写法" class="headerlink" title="dp的几种写法"></a>dp的几种写法</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int dp(int i)&#123;</span><br><span class="line">    int &amp;ans &#x3D; d[i];</span><br><span class="line">    if(d[i] !&#x3D; -1) return d[i]; &#x2F;&#x2F;有可能出现长度为0的点，且用-1表示没计算过</span><br><span class="line"></span><br><span class="line">    ans &#x3D; -(1&lt;&lt;30) ; &#x2F;&#x2F;ans 应该为一个很小的值 负(2的33次方)，这样用来表示当前 无解</span><br><span class="line">    for(int j &#x3D; 1;j &lt;&#x3D; n;j++)&#123;</span><br><span class="line"></span><br><span class="line">        if(i &gt;&#x3D; v[j]) &#x2F;&#x2F;如果 i-v[j] 结点 存在，则可以从 i 结点到 i-v[j] 结点，即如果放得下，就判断哪个大</span><br><span class="line">        ans &#x3D; max(ans,dp(i - v[j]) + 1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>也可以用vis数组来判断有没有访问过，这样比较容易读代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int dp(int i)&#123;</span><br><span class="line">    int &amp;ans &#x3D; d[i];</span><br><span class="line">    if(vis[i]) return d[i]; &#x2F;&#x2F;有可能出现长度为0的点，且用-1表示没计算过</span><br><span class="line"></span><br><span class="line">    vis[i] &#x3D; 1;</span><br><span class="line">    ans &#x3D; -(1&lt;&lt;30) ; &#x2F;&#x2F;ans 应该为一个很小的值 负(2的33次方)，这样用来表示当前 无解</span><br><span class="line">    for(int j &#x3D; 1;j &lt;&#x3D; n;j++)&#123;</span><br><span class="line"></span><br><span class="line">        if(i &gt;&#x3D; v[j]) &#x2F;&#x2F;如果 i-v[j] 结点 存在，则可以从 i 结点到 i-v[j] 结点，即如果放得下，就判断哪个大</span><br><span class="line">        ans &#x3D; max(ans,dp(i - v[j]) + 1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我们知道，上面的记忆化搜索的形式是可以写成递推式的。<br>当要同时求最短路和最长路时，写成递推式更方便</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">minv[0] &#x3D; 0;</span><br><span class="line">maxv[0] &#x3D; 0;</span><br><span class="line">for(int i &#x3D; 1;i &lt;&#x3D; S;i++)&#123;</span><br><span class="line">    minv[i] &#x3D; INF;</span><br><span class="line">    maxv[i] &#x3D; -INF;</span><br><span class="line">&#125;</span><br><span class="line">for(int i &#x3D; 1;i &lt;&#x3D; S;i++)&#123;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;下面的内容相当于dp(i);</span><br><span class="line">    for(int j &#x3D; 1;j &lt;&#x3D; n;j++)&#123;</span><br><span class="line">        if(i &gt;&#x3D; v[j] )&#123;</span><br><span class="line">            minv[i] &#x3D; min(minv[i],minv[i - v[j]] + 1);</span><br><span class="line">            maxv[i] &#x3D; max(maxv[i],maxv[i - v[j]] + 1);</span><br><span class="line">            &#x2F;&#x2F;这里因为i是从 1 到 S 的，所以在这之前，已经把dp(i)算出来了。</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="输出字典序方法"><a href="#输出字典序方法" class="headerlink" title="输出字典序方法"></a>输出字典序方法</h3><p>递归输出字典序最小的方案</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;d为dp数组，这样可以是存最长路的数组或最短路的数组</span><br><span class="line">print_ans(int *d,int S)&#123;</span><br><span class="line">    for(int i &#x3D; 1;i &lt;&#x3D; n;i++)&#123;</span><br><span class="line">        &#x2F;&#x2F;i从1开始，所以只要有第一个可以从 S 走到 S - v[i] 那么字典序最小</span><br><span class="line">        if(S &gt;&#x3D; v[i] &amp;&amp; d[S] &#x3D;&#x3D; d[S - v[i]] + 1)&#123;</span><br><span class="line">            printf(&quot;%d &quot;,i);</span><br><span class="line">            print_ans(d,S-v[i]);</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>也可以在dp过程中把字典序最小的存下来</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">minv[0] &#x3D; 0;</span><br><span class="line">maxv[0] &#x3D; 0;</span><br><span class="line">int min_ans[];</span><br><span class="line">int max_ans[];</span><br><span class="line">for(int i &#x3D; 1;i &lt;&#x3D; S;i++)&#123;</span><br><span class="line">    minv[i] &#x3D; INF;</span><br><span class="line">    maxv[i] &#x3D; -INF;</span><br><span class="line">&#125;</span><br><span class="line">for(int i &#x3D; 1;i &lt;&#x3D; S;i++)&#123;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;下面的内容相当于dp(i);</span><br><span class="line">    for(int j &#x3D; 1;j &lt;&#x3D; n;j++)&#123;</span><br><span class="line">        if(i &gt;&#x3D; v[j] )&#123;</span><br><span class="line">            &#x2F;&#x2F;如果 i 能到达i - v[j] 且 minv[i] &gt; minv[i - v[j]] + 1</span><br><span class="line">            if(minv[i] &gt; minv[i - v[j]] + 1)&#123;</span><br><span class="line">                minv[i] &#x3D; minv[i - v[j]] + 1;</span><br><span class="line"></span><br><span class="line">                min_ans[i] &#x3D; j; &#x2F;&#x2F;用来存，最短路中，i结点的下一个结点。</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;如果 i 能到达i - v[j] 且 maxv[i] &lt; maxv[i - v[j]] + 1</span><br><span class="line">            if(maxv[i] &lt; maxv[i - v[j]] + 1)&#123;</span><br><span class="line">                maxv[i] &#x3D; maxv[i - v[j]] + 1;</span><br><span class="line"></span><br><span class="line">                max_ans[i] &#x3D; j; &#x2F;&#x2F;用来存，最短路中，i结点的下一个结点。</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>此时的输出为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void print_ans(int *d,int S)&#123;</span><br><span class="line">    while(S)&#123;</span><br><span class="line">        printf(&quot;%d &quot;,S);</span><br><span class="line">        S &#x3D; d[S]; &#x2F;&#x2F;找S的下一个结点</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>tips：</p>
+<ol>
+<li>对于无解和没访问过，每种特殊值，都应该与其他特殊值区分开。</li>
+<li>用vis数组来判断有没有访问过，这样比较容易读代码。</li>
+<li>如果状态比较复杂，可以用map来保存状态值，这样只需要调用if(d.count(S)) 就能知道S是否算过。</li>
+</ol>
+<hr>
+<h2 id="刷表法和填表法"><a href="#刷表法和填表法" class="headerlink" title="刷表法和填表法"></a>刷表法和填表法</h2><p>填表法：<br>传统的递推法，表示  “对于每个状态i，计算f(i)”,这就是填表法.</p>
+<p>填表法需要去手动找对于计算f(i)的所有前依赖项。</p>
+<p>刷表法：<br>对于每个状态i，更新f(i)所影响到的所有状态<br>即，按照拓扑序，枚举所有的起始点i，然后开始枚举所有边(i,j)，更新d(j) = max(d(j),d(i) + 1)</p>
+<p>每次这样得到的j不一定是得到最后的解，这只是一个更新方程。<br>且只有每个状态所依赖的状态 对 它的影响相互独立时才能用。</p>
+<hr>
+<h1 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h1><ol>
+<li><p>在编写主程序之前，要测试建图过程是否正确。</p>
+</li>
+<li><p>记忆化搜索中，声明一个变量来保存当前状态（的地址），使得程序非常简练。</p>
+</li>
+<li><p>对于无解和没访问过，每种特殊值，都应该与其他特殊值区分开。</p>
+</li>
+<li><p>用vis数组来判断有没有访问过，这样比较容易读代码。</p>
+</li>
+<li><p>如果状态比较复杂，可以用map来保存状态值，这样只需要调用if(d.count(S)) 就能知道S是否算过。</p>
+</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/09/02/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>嘿嘿！第一篇博客完成了！</title>
     <url>/2020/09/02/Hello-World-0/</url>
     <content><![CDATA[<h3 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h3><p>这是第一章的内容</p>
@@ -8,84 +167,6 @@
 <h3 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h3><p>这是第二章的内容，编辑文章的格式是用markdown</p>
 <p>这样 <del>是什么样子</del></p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>前缀和的使用</title>
-    <url>/2020/09/21/%E5%89%8D%E7%BC%80%E5%92%8C%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h3 id="前缀和的基本概念"><a href="#前缀和的基本概念" class="headerlink" title="前缀和的基本概念"></a>前缀和的基本概念</h3><p>s[i] 为 数组a 前i个元素的和<br>s[i] = a[0]+ … + a[i]<br>s[i] = s[i-1] + a[i]</p>
-<ul>
-<li>l 到 r 区间内的和：<br>sum[l,r] = s[r]-s[l-1]</li>
-</ul>
-<p>异或前缀和：<br>s[i] 为 数组a 前i个元素的异或和<br>s[i] = s[i-1] xor a[i]</p>
-<h3 id="二维前缀和"><a href="#二维前缀和" class="headerlink" title="二维前缀和"></a>二维前缀和</h3><h4 id="P2004-领地选择"><a href="#P2004-领地选择" class="headerlink" title="P2004 领地选择"></a>P2004 领地选择</h4><p>题意理解：<br>有一个N x M的地图，地图上的每一个点都有一个值，求占地C x C 正方形里值的和最大</p>
-<p>思路：<br>用sum[a][b]来记录 从[0][0]到[a][b]范围内的值之和，即二维前缀和。</p>
-<p>边读边存<br><code>sum[i][j] += sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1]+data;</code><br>当读到的i,j &gt;c 时。<br>开始判断以(i,j)为右下角坐标的C x C正方形的值和是不是最大的</p>
-<p>即：<br><code>sumMax = max(sumMax,sum[i][j] - sum[i-c][j] - sum[i][j-c] + sum[i-c][j-c]);</code></p>
-<h5 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h5><p>如：求区间[a][b] —— [i][j]范围内的值 (i&gt;a &amp;&amp; j&gt;b)<br><code>= sum[i][j] - sum[a][j] - sum[i][b] + sum[a][b]</code></p>
-<p>code:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int sum[1009][1009];</span><br><span class="line">int n,m,c;</span><br><span class="line">int maxs&#x3D;-1e9;</span><br><span class="line">int maxi &#x3D; 0;</span><br><span class="line">int maxj &#x3D; 0;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	scanf(&quot;%d %d %d&quot;,&amp;n,&amp;m,&amp;c);</span><br><span class="line">	for(int i &#x3D; 1;i &lt;&#x3D; n;i++)&#123;</span><br><span class="line">		for(int j &#x3D; 1;j &lt;&#x3D; m;j++)&#123;</span><br><span class="line">			int data;</span><br><span class="line">			scanf(&quot;%d&quot;,&amp;data);</span><br><span class="line">			sum[i][j] +&#x3D; sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1]+data;</span><br><span class="line">			if(j&gt;&#x3D;c&amp;&amp;i&gt;&#x3D;c)&#123;</span><br><span class="line">				int now &#x3D; sum[i][j] - sum[i-c][j] - sum[i][j-c] + sum[i-c][j-c];</span><br><span class="line">				if(now&gt;maxs)&#123;</span><br><span class="line">					maxs &#x3D; now;</span><br><span class="line">					maxi &#x3D; i-c+1;</span><br><span class="line">					maxj &#x3D; j-c+1;</span><br><span class="line">				&#125;           </span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">	printf(&quot;%d %d\n&quot;,maxi,maxj);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="由前缀和到差分"><a href="#由前缀和到差分" class="headerlink" title="由前缀和到差分"></a>由前缀和到差分</h3><h4 id="P3406-海底高铁"><a href="#P3406-海底高铁" class="headerlink" title="P3406 海底高铁"></a>P3406 海底高铁</h4><p>题意理解：<br>对于一条路线，要经过m个城市（可能有重复的城市），城市只有i-1 i i+1 相邻，对于相邻俩个城市i和i+1之间的路段，设走过这条路有ni次，要么付ci + ni * bi 要么付ai * ni；</p>
-<p>就是一个选择问题，首先得知道每个路段会经过多少次。但是如果对于2号城市到10000号城市，每次都用循环去累加次数，会次数过多。</p>
-<p>这里可以用到差分的思想。<br>对于l 到 r之间和</p>
-<p>只需要记录ton[l] 和 ton[r]就行</p>
-<p>即：<br>ton[l]++;<br>ton[r]–;<br>然后通过前缀和再求得中间的值：<br>for i = l+1；i&lt;=r;i++<br>ton[l] = ton[l-1] + ton[i];</p>
-<p>用p[i]来记录第i段路</p>
-<p>code：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">const int imax &#x3D; 100009;</span><br><span class="line">long long n,m;</span><br><span class="line">long long p[imax];</span><br><span class="line">long long a[imax],b[imax],c[imax];</span><br><span class="line"></span><br><span class="line">int ton[imax]; </span><br><span class="line">long long ans &#x3D; 0;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	scanf(&quot;%d %d&quot;,&amp;n,&amp;m);</span><br><span class="line">	</span><br><span class="line">	for(int i &#x3D; 0;i &lt; m;i++)&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;p[i]);</span><br><span class="line">		if(i!&#x3D;0)&#123;</span><br><span class="line">			if(p[i-1]&gt;&#x3D;p[i])&#123;</span><br><span class="line">				ton[p[i]]++;</span><br><span class="line">				ton[p[i-1]]--;</span><br><span class="line">			&#125;</span><br><span class="line">			else&#123;</span><br><span class="line">				ton[p[i-1]]++;</span><br><span class="line">				ton[p[i]]--;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	for(int i &#x3D; 1;i&lt;n;i++)&#123;</span><br><span class="line">		scanf(&quot;%d %d %d&quot;,&amp;a[i],&amp;b[i],&amp;c[i]);</span><br><span class="line">		</span><br><span class="line">		ton[i] &#x3D; ton[i-1]+ton[i];</span><br><span class="line">		</span><br><span class="line">		if(ton[i]&gt;0)&#123;</span><br><span class="line">			if(c[i] - (a[i]-b[i])*ton[i] &lt;&#x3D;0)&#123;</span><br><span class="line">				ans +&#x3D; (ton[i]*b[i]+c[i]);</span><br><span class="line">&#x2F;&#x2F;				printf(&quot;对于第%d到%d，买卡，总共花了%d\n&quot;,i,i+1,(ton[i]*b[i]+c[i]));</span><br><span class="line">			&#125; </span><br><span class="line">			else &#123;</span><br><span class="line">				ans +&#x3D; ton[i]*a[i]; </span><br><span class="line">&#x2F;&#x2F;				printf(&quot;对于第%d到%d，不买卡，总共花了%d\n&quot;,i,i+1,ton[i]*a[i]);</span><br><span class="line">			&#125;			</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	printf(&quot;%lld&quot;,ans);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="分组的前缀和——与数学公式的结合"><a href="#分组的前缀和——与数学公式的结合" class="headerlink" title="分组的前缀和——与数学公式的结合"></a>分组的前缀和——与数学公式的结合</h3><h4 id="P2671-求和"><a href="#P2671-求和" class="headerlink" title="P2671 求和"></a>P2671 求和</h4><p>题意理解：<br>有m个颜色总数，n个格子<br>求所有的俩元组(x,z)</p>
-<ul>
-<li>z = 2*i + x (i&gt;=1)</li>
-<li>并且x,z的颜色相同</li>
-</ul>
-<p>（x+z） * （number_x +number_z)<br>的和</p>
-<p>思路：</p>
-<ul>
-<li>nu数组 记录i对应的number</li>
-<li>c数据 记录i对应的颜色</li>
-</ul>
-<hr>
-<ul>
-<li>color[x][1] 记录i为奇数 且 颜色为x的格子数</li>
-<li>color[x][0] 记录i为偶数 且 颜色为x的格子数</li>
-</ul>
-<hr>
-<ul>
-<li>sum[x][1] 记录i为奇数 且 颜色为x的格子的number的和</li>
-<li>sum[x][0] 记录i为偶数 且 颜色为x的格子的number的和</li>
-</ul>
-<p>分类讨论，对于颜色为x，i为奇数的格子<br>如果有n个，<br>那么就有<br>假设1 3 5 7格子的颜色相同<br>（1+3）*（number_1+number_3）+ (1+5) * (number_1+number_5) + (1+7) * (number_1+number_7)</p>
-<p>+</p>
-<p>(3+5) * (number_3+number_5) + (3+7) * (number_3+number_7)</p>
-<p>+</p>
-<p>(5+7) * (number_5+number_7)</p>
-<p>从上面发现，我们可以把所有的项拆开来<br>可以发现</p>
-<p>*<em>对于i</em>number_i**</p>
-<ul>
-<li>1出现3次 </li>
-<li>3出现3次 </li>
-<li>5出现3次 </li>
-</ul>
-<p>i*nui * （colorx-2）</p>
-<p>*<em>对于i</em>number_j**</p>
-<ul>
-<li>1 3 1 5 1 7  …都是1次</li>
-</ul>
-<p>i* sumx</p>
-<p>再把i提出来</p>
-<p>则对于i</p>
-<p>i *（nui * （colorx-2）  + sumx ）</p>
-<p>公式拆开发现并不是巧合，<br>则可以得到一个可以利用前缀和简化运算的操作：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for(i&#x3D;1;i&lt;&#x3D;7;i+&#x3D;2)&#123;</span><br><span class="line">    ans &#x3D; ans + i * (nui * (colorx-2) )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>code:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int n,m;</span><br><span class="line">int sum[100009][2];</span><br><span class="line">int color[100009][2];</span><br><span class="line">int c[100009];</span><br><span class="line">int nu[100009];</span><br><span class="line">int ans &#x3D; 0;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	int x;</span><br><span class="line">	scanf(&quot;%d %d&quot;,&amp;n,&amp;m);</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;x);</span><br><span class="line">		nu[i]&#x3D;x;</span><br><span class="line">	&#125;</span><br><span class="line">	for(int j &#x3D; 1;j&lt;&#x3D;n;j++)</span><br><span class="line">	&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;x);</span><br><span class="line">		c[j] &#x3D; x;</span><br><span class="line">		color[x][j%2]++;</span><br><span class="line">		sum[x][j%2] &#x3D; (sum[x][j%2] + nu[j])%10007; &#x2F;&#x2F; 把所有这个颜色的格子数 按奇偶 加起来 </span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;n;i++)&#123;</span><br><span class="line">		ans &#x3D; (ans + i*(((color[c[i]][i%2]-2)*nu[i])%10007+sum[c[i]][i%2]))%10007;</span><br><span class="line">	&#125; </span><br><span class="line">	printf(&quot;%d&quot;,ans);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <tags>
-        <tag>PHP</tag>
-      </tags>
   </entry>
   <entry>
     <title>algorithm</title>
@@ -192,7 +273,7 @@
 <h4 id="考试奖励"><a href="#考试奖励" class="headerlink" title="考试奖励"></a>考试奖励</h4><p>PAT 不设合格标准，凡参加考试且获得非零分者均有成绩，可获得统一颁发的证书。 证书中包含“考试分数/满分”和本次考试的“排名/考生总数”两部分成绩。</p>
 <p>获得优秀成绩（甲、乙、顶级90分以上，）的考生，有资格购买实体徽章<br><a href="https://www.patest.cn/introduction/badge_issuance_rule">徽章规则</a></p>
 <h4 id="考点"><a href="#考点" class="headerlink" title="考点"></a>考点</h4><p><a href="https://www.patest.cn/location">PAT 考点</a><br>北京唯一考点：<br>北京工业大学 北京工业大学计算中心（校内东南角 实训楼（原知行楼）1层）</p>
-<h4 id="编程语言及编译器-1"><a href="#编程语言及编译器-1" class="headerlink" title="编程语言及编译器"></a>编程语言及编译器</h4><p>北京工业大学： 郑爽, <a href="mailto:&#50;&#x32;&#x34;&#54;&#x31;&#x39;&#56;&#x38;&#x40;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;">&#50;&#x32;&#x34;&#54;&#x31;&#x39;&#56;&#x38;&#x40;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;</a><br>Code::Blocks、Dev C＋＋5.10、Visual Studio2010、Eclipse Oxygen 3、Python3.6</p>
+<h4 id="编程语言及编译器-1"><a href="#编程语言及编译器-1" class="headerlink" title="编程语言及编译器"></a>编程语言及编译器</h4><p>北京工业大学： 郑爽, <a href="mailto:&#50;&#50;&#x34;&#x36;&#49;&#x39;&#56;&#56;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#109;">&#50;&#50;&#x34;&#x36;&#49;&#x39;&#56;&#56;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#109;</a><br>Code::Blocks、Dev C＋＋5.10、Visual Studio2010、Eclipse Oxygen 3、Python3.6</p>
 <h4 id="考试形式-1"><a href="#考试形式-1" class="headerlink" title="考试形式"></a>考试形式</h4><p><strong>参赛要求</strong>：无论是否是大学生，均可参加。<br><strong>考试时间</strong>：三个小时。<br><strong>考试地点</strong>：线下，在全国有70多个认证点，北京为北京工业大学。<br><strong>分组</strong>：PAT分为顶级（英文，3题）、甲级（英文，4题）、乙级（中文，5题）。满分都是100分。<br><strong>考试赛制</strong>：IOI赛制，每道题提交后可以看到反馈，不计提交次数，无罚时。</p>
 <h4 id="考纲-1"><a href="#考纲-1" class="headerlink" title="考纲"></a>考纲</h4><h5 id="乙级"><a href="#乙级" class="headerlink" title="乙级"></a>乙级</h5><p><strong>中文题目 只涉及基础编程 最难到排序算法</strong></p>
 <ol>
@@ -256,21 +337,81 @@
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2020/09/02/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+    <title>前缀和的使用</title>
+    <url>/2020/09/21/%E5%89%8D%E7%BC%80%E5%92%8C%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h3 id="前缀和的基本概念"><a href="#前缀和的基本概念" class="headerlink" title="前缀和的基本概念"></a>前缀和的基本概念</h3><p>s[i] 为 数组a 前i个元素的和<br>s[i] = a[0]+ … + a[i]<br>s[i] = s[i-1] + a[i]</p>
+<ul>
+<li>l 到 r 区间内的和：<br>sum[l,r] = s[r]-s[l-1]</li>
+</ul>
+<p>异或前缀和：<br>s[i] 为 数组a 前i个元素的异或和<br>s[i] = s[i-1] xor a[i]</p>
+<h3 id="二维前缀和"><a href="#二维前缀和" class="headerlink" title="二维前缀和"></a>二维前缀和</h3><h4 id="P2004-领地选择"><a href="#P2004-领地选择" class="headerlink" title="P2004 领地选择"></a>P2004 领地选择</h4><p>题意理解：<br>有一个N x M的地图，地图上的每一个点都有一个值，求占地C x C 正方形里值的和最大</p>
+<p>思路：<br>用sum[a][b]来记录 从[0][0]到[a][b]范围内的值之和，即二维前缀和。</p>
+<p>边读边存<br><code>sum[i][j] += sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1]+data;</code><br>当读到的i,j &gt;c 时。<br>开始判断以(i,j)为右下角坐标的C x C正方形的值和是不是最大的</p>
+<p>即：<br><code>sumMax = max(sumMax,sum[i][j] - sum[i-c][j] - sum[i][j-c] + sum[i-c][j-c]);</code></p>
+<h5 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h5><p>如：求区间[a][b] —— [i][j]范围内的值 (i&gt;a &amp;&amp; j&gt;b)<br><code>= sum[i][j] - sum[a][j] - sum[i][b] + sum[a][b]</code></p>
+<p>code:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int sum[1009][1009];</span><br><span class="line">int n,m,c;</span><br><span class="line">int maxs&#x3D;-1e9;</span><br><span class="line">int maxi &#x3D; 0;</span><br><span class="line">int maxj &#x3D; 0;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	scanf(&quot;%d %d %d&quot;,&amp;n,&amp;m,&amp;c);</span><br><span class="line">	for(int i &#x3D; 1;i &lt;&#x3D; n;i++)&#123;</span><br><span class="line">		for(int j &#x3D; 1;j &lt;&#x3D; m;j++)&#123;</span><br><span class="line">			int data;</span><br><span class="line">			scanf(&quot;%d&quot;,&amp;data);</span><br><span class="line">			sum[i][j] +&#x3D; sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1]+data;</span><br><span class="line">			if(j&gt;&#x3D;c&amp;&amp;i&gt;&#x3D;c)&#123;</span><br><span class="line">				int now &#x3D; sum[i][j] - sum[i-c][j] - sum[i][j-c] + sum[i-c][j-c];</span><br><span class="line">				if(now&gt;maxs)&#123;</span><br><span class="line">					maxs &#x3D; now;</span><br><span class="line">					maxi &#x3D; i-c+1;</span><br><span class="line">					maxj &#x3D; j-c+1;</span><br><span class="line">				&#125;           </span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">	printf(&quot;%d %d\n&quot;,maxi,maxj);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<h3 id="由前缀和到差分"><a href="#由前缀和到差分" class="headerlink" title="由前缀和到差分"></a>由前缀和到差分</h3><h4 id="P3406-海底高铁"><a href="#P3406-海底高铁" class="headerlink" title="P3406 海底高铁"></a>P3406 海底高铁</h4><p>题意理解：<br>对于一条路线，要经过m个城市（可能有重复的城市），城市只有i-1 i i+1 相邻，对于相邻俩个城市i和i+1之间的路段，设走过这条路有ni次，要么付ci + ni * bi 要么付ai * ni；</p>
+<p>就是一个选择问题，首先得知道每个路段会经过多少次。但是如果对于2号城市到10000号城市，每次都用循环去累加次数，会次数过多。</p>
+<p>这里可以用到差分的思想。<br>对于l 到 r之间和</p>
+<p>只需要记录ton[l] 和 ton[r]就行</p>
+<p>即：<br>ton[l]++;<br>ton[r]–;<br>然后通过前缀和再求得中间的值：<br>for i = l+1；i&lt;=r;i++<br>ton[l] = ton[l-1] + ton[i];</p>
+<p>用p[i]来记录第i段路</p>
+<p>code：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">const int imax &#x3D; 100009;</span><br><span class="line">long long n,m;</span><br><span class="line">long long p[imax];</span><br><span class="line">long long a[imax],b[imax],c[imax];</span><br><span class="line"></span><br><span class="line">int ton[imax]; </span><br><span class="line">long long ans &#x3D; 0;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	scanf(&quot;%d %d&quot;,&amp;n,&amp;m);</span><br><span class="line">	</span><br><span class="line">	for(int i &#x3D; 0;i &lt; m;i++)&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;p[i]);</span><br><span class="line">		if(i!&#x3D;0)&#123;</span><br><span class="line">			if(p[i-1]&gt;&#x3D;p[i])&#123;</span><br><span class="line">				ton[p[i]]++;</span><br><span class="line">				ton[p[i-1]]--;</span><br><span class="line">			&#125;</span><br><span class="line">			else&#123;</span><br><span class="line">				ton[p[i-1]]++;</span><br><span class="line">				ton[p[i]]--;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	for(int i &#x3D; 1;i&lt;n;i++)&#123;</span><br><span class="line">		scanf(&quot;%d %d %d&quot;,&amp;a[i],&amp;b[i],&amp;c[i]);</span><br><span class="line">		</span><br><span class="line">		ton[i] &#x3D; ton[i-1]+ton[i];</span><br><span class="line">		</span><br><span class="line">		if(ton[i]&gt;0)&#123;</span><br><span class="line">			if(c[i] - (a[i]-b[i])*ton[i] &lt;&#x3D;0)&#123;</span><br><span class="line">				ans +&#x3D; (ton[i]*b[i]+c[i]);</span><br><span class="line">&#x2F;&#x2F;				printf(&quot;对于第%d到%d，买卡，总共花了%d\n&quot;,i,i+1,(ton[i]*b[i]+c[i]));</span><br><span class="line">			&#125; </span><br><span class="line">			else &#123;</span><br><span class="line">				ans +&#x3D; ton[i]*a[i]; </span><br><span class="line">&#x2F;&#x2F;				printf(&quot;对于第%d到%d，不买卡，总共花了%d\n&quot;,i,i+1,ton[i]*a[i]);</span><br><span class="line">			&#125;			</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	printf(&quot;%lld&quot;,ans);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="分组的前缀和——与数学公式的结合"><a href="#分组的前缀和——与数学公式的结合" class="headerlink" title="分组的前缀和——与数学公式的结合"></a>分组的前缀和——与数学公式的结合</h3><h4 id="P2671-求和"><a href="#P2671-求和" class="headerlink" title="P2671 求和"></a>P2671 求和</h4><p>题意理解：<br>有m个颜色总数，n个格子<br>求所有的俩元组(x,z)</p>
+<ul>
+<li>z = 2*i + x (i&gt;=1)</li>
+<li>并且x,z的颜色相同</li>
+</ul>
+<p>（x+z） * （number_x +number_z)<br>的和</p>
+<p>思路：</p>
+<ul>
+<li>nu数组 记录i对应的number</li>
+<li>c数据 记录i对应的颜色</li>
+</ul>
+<hr>
+<ul>
+<li>color[x][1] 记录i为奇数 且 颜色为x的格子数</li>
+<li>color[x][0] 记录i为偶数 且 颜色为x的格子数</li>
+</ul>
+<hr>
+<ul>
+<li>sum[x][1] 记录i为奇数 且 颜色为x的格子的number的和</li>
+<li>sum[x][0] 记录i为偶数 且 颜色为x的格子的number的和</li>
+</ul>
+<p>分类讨论，对于颜色为x，i为奇数的格子<br>如果有n个，<br>那么就有<br>假设1 3 5 7格子的颜色相同<br>（1+3）*（number_1+number_3）+ (1+5) * (number_1+number_5) + (1+7) * (number_1+number_7)</p>
+<p>+</p>
+<p>(3+5) * (number_3+number_5) + (3+7) * (number_3+number_7)</p>
+<p>+</p>
+<p>(5+7) * (number_5+number_7)</p>
+<p>从上面发现，我们可以把所有的项拆开来<br>可以发现</p>
+<p>*<em>对于i</em>number_i**</p>
+<ul>
+<li>1出现3次 </li>
+<li>3出现3次 </li>
+<li>5出现3次 </li>
+</ul>
+<p>i*nui * （colorx-2）</p>
+<p>*<em>对于i</em>number_j**</p>
+<ul>
+<li>1 3 1 5 1 7  …都是1次</li>
+</ul>
+<p>i* sumx</p>
+<p>再把i提出来</p>
+<p>则对于i</p>
+<p>i *（nui * （colorx-2）  + sumx ）</p>
+<p>公式拆开发现并不是巧合，<br>则可以得到一个可以利用前缀和简化运算的操作：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for(i&#x3D;1;i&lt;&#x3D;7;i+&#x3D;2)&#123;</span><br><span class="line">    ans &#x3D; ans + i * (nui * (colorx-2) )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>code:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int n,m;</span><br><span class="line">int sum[100009][2];</span><br><span class="line">int color[100009][2];</span><br><span class="line">int c[100009];</span><br><span class="line">int nu[100009];</span><br><span class="line">int ans &#x3D; 0;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	int x;</span><br><span class="line">	scanf(&quot;%d %d&quot;,&amp;n,&amp;m);</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;x);</span><br><span class="line">		nu[i]&#x3D;x;</span><br><span class="line">	&#125;</span><br><span class="line">	for(int j &#x3D; 1;j&lt;&#x3D;n;j++)</span><br><span class="line">	&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;x);</span><br><span class="line">		c[j] &#x3D; x;</span><br><span class="line">		color[x][j%2]++;</span><br><span class="line">		sum[x][j%2] &#x3D; (sum[x][j%2] + nu[j])%10007; &#x2F;&#x2F; 把所有这个颜色的格子数 按奇偶 加起来 </span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;n;i++)&#123;</span><br><span class="line">		ans &#x3D; (ans + i*(((color[c[i]][i%2]-2)*nu[i])%10007+sum[c[i]][i%2]))%10007;</span><br><span class="line">	&#125; </span><br><span class="line">	printf(&quot;%d&quot;,ans);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
+      <tags>
+        <tag>PHP</tag>
+      </tags>
   </entry>
 </search>
